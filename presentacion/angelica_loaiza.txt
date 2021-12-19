@@ -1,0 +1,1 @@
+Ubicación: Bogotá. Comunicadora social de la Universidad Externado de Colombia. Estudios en temas digitales como contenidos convergentes, gestión de sistemas de información local (Google) y principios de programación. Experiencia en portales web en front end. Conocimientos en HTML, edición de imágenes web, redacción web y manejo de redes sociales

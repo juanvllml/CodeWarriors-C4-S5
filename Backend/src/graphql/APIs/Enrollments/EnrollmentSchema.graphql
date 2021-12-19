@@ -1,0 +1,40 @@
+scalar Date
+
+type Query {
+    enrollments: [Enrollment]
+    enrollmentsByProject(project_id: String!): [Enrollment]
+}
+
+type Mutation {
+    createEnrollment(input: EnrollmentInput): Enrollment
+    updateEnrollment(_id: ID!, input: EnrollmentUpdate): Enrollment
+    deleteEnrollment(_id: ID!): Enrollment
+}
+
+type Enrollment {
+    _id: ID!
+    enrollment_id: String
+    project_id: String
+    student_id: String
+    enrollment_status: String
+    admission_date: Date
+    egress_date: Date
+}
+
+input EnrollmentInput {
+    enrollment_id: String!
+    project_id: String!
+    student_id: String!
+    enrollment_status: String!
+    admission_date: Date!
+    egress_date: Date!
+}
+
+input EnrollmentUpdate {
+    enrollment_id: String
+    project_id: String
+    student_id: String
+    enrollment_status: String
+    admission_date: Date
+    egress_date: Date
+}

@@ -1,0 +1,1 @@
+Dayron Garzon Romano, soy Técnico en programacion de software del SENA, con 32 años, he trabajado como desarrollador Backend Bajo el lenguaje PHP con frameworks como Codeigniter, Yii, Laravel, entre otros. También tengo experiencia con HTML, CSS, JS, Jquery, NodeJs, ReactJs, Mysql, MariaDB.

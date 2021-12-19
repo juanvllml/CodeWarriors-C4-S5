@@ -1,0 +1,40 @@
+scalar Date
+
+type Query {
+    advances: [Advance]
+    advancesByProject(project_id: String!): [Advance]
+}
+
+type Mutation {
+    createAdvance(input: AdvanceInput): Advance
+    updateAdvance(_id: ID!, input: AdvanceUpdate): Advance
+    deleteAdvance(_id: ID!): Advance
+}
+
+type Advance {
+    _id: ID!
+    advance_id: String
+    project_id: String
+    student_id: String
+    advance_date: Date
+    advance_description: [String]
+    leader_observations: [String]
+}
+
+input AdvanceInput {
+    advance_id: String!
+    project_id: String!
+    student_id: String!
+    advance_date: Date!
+    advance_description: [String]!
+    leader_observations: [String]!
+}
+
+input AdvanceUpdate {
+    advance_id: String
+    project_id: String
+    student_id: String
+    advance_date: Date
+    advance_description: [String]
+    leader_observations: [String]
+}

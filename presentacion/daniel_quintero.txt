@@ -1,0 +1,3 @@
+Soy Daniel quintero Desarrollador de Software e Ingeniero Industrial. Apasionado por el mundo de la tecnología.
+
+He trabajado realizando aplicaciones web usando NodeJs, Express, mysql, jwt y web sockets.
