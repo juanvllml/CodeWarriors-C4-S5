@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AuthSide from '../../layouts/AuthSide';
 import { Roles } from '../../utils/enums';
 import { useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import Swal from 'sweetalert2';
 import { Loading } from '../Loading';
 import { CREATE_USER } from '../../graphql/Users/mutations';
@@ -50,7 +50,7 @@ function RegisterForm() {
         showConfirmButton: false,
       })
     }
-  }, [mutationError, mutationData]);
+  }, [mutationError, mutationData, navigate]);
 
   return (
     <>
@@ -75,7 +75,7 @@ function RegisterForm() {
                       </div>
                       <form onSubmit={handleRegister}>
                         <div className="form-outline mb-2">
-                          <label className="form-label">Nombes completos</label>
+                          <label className="form-label">Nombres completos</label>
                           <input type="text" className="form-control" name="full_name"
                             defaultValue={register.full_name}
                             onChange={(e) => setRegister({ ...register, full_name: e.target.value })}

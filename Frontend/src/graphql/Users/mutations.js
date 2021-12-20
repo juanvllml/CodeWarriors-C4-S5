@@ -23,6 +23,24 @@ const UPDATE_USER = gql`
     }
 `;
 
+const LOGIN = gql`
+    mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+        token
+        error
+        }
+    }
+`;
+
+const REFRESH_TOKEN = gql`
+    mutation RefreshToken {
+        refreshToken {
+            token
+            error
+        }
+    }
+`;
 
 
-export { UPDATE_USER, CREATE_USER };
+
+export { UPDATE_USER, CREATE_USER, LOGIN, REFRESH_TOKEN};

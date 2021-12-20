@@ -6,59 +6,58 @@ import PrivateComponent from '../components/PrivateComponent';
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faUser, faUsers, faFolder, faUserCheck } from '@fortawesome/free-solid-svg-icons'
+import {Roles} from '../utils/enums'
 
 library.add(faHome, faUser, faUsers, faFolder, faUserCheck);
 
-const SidebarLinks = () => (
-    <ul className="SidebarList nav">
-        <SidebarRouteImagen to='/profile' title='Perfil' icon='user' />
+const SidebarLinks = () => {
+    const { userData } = useUser();
+    return (
+
+        <ul className="SidebarList nav">
         <SidebarRoute to='' title='Inicio' icon='home' />
+        <SidebarRouteImagen to='/profile' title='Perfil' icon='user' />
         <PrivateComponent roleList={['ADMINISTRADOR']}>
             <SidebarRoute to='/users' title='Usuarios' icon='users' />
         </PrivateComponent>
-        <SidebarRoute to='/projects' title='Proyectos' icon='folder' />
-        <PrivateComponent roleList={['ADMINISTRADOR', 'LIDER']}>
+        <PrivateComponent roleList={['LIDER']}>
+            <SidebarRoute to='/students' title='Estudiantes' icon='users' />
+        </PrivateComponent>
+        <PrivateComponent roleList={['ADMINISTRADOR']}>
+            <SidebarRoute to='/projects' title='Proyectos' icon='folder' />
+        </PrivateComponent>
+        <PrivateComponent roleList={['LIDER']}>
+            <SidebarRoute to={'/projects-leader/'+userData._id} title='Proyectos' icon='folder' />
+        </PrivateComponent>
+        <PrivateComponent roleList={['ESTUDIANTE']}>
+            <SidebarRoute to='/projects-est' title='Proyectos' icon='folder' />
+        </PrivateComponent>
+        {/* <PrivateComponent roleList={['LIDER']}>
             <SidebarRoute
                 to='/inscripciones'
                 title='Aprobacion Inscripciones'
                 icon='user-check'
-            />
-        </PrivateComponent>
+                />
+        </PrivateComponent> */}
     </ul>
-);
-
-const Logout = () => {
-    const { setToken } = useAuth();
-    const deleteToken = () => {
-        setToken(null);
-    };
-    return (
-        <NavLink to='/auth/login' className='row-item d-flex p-2 align-items-center'>
-            <button type='button' className='btn btn-danger d-flex align-items-center' onClick={() => deleteToken()}>
-                <div className='flex items-center'>
-                    <i className='fas fa-sign-out-alt' />
-                    <span className='text-sm  ml-2'>Cerrar Sesión</span>
-                </div>
-            </button>
-        </NavLink>
-    );
+    )
 };
 
-const Logo = () => (
-    <>
+const Logo = () => {
+    const { userData } = useUser();
+    return (<>
         <div className="container d-flex flex-column pt-4 text-center">
             <small className="mt-2"><strong>Bienvenido</strong><br />
-                user
+                {userData.full_name}
                 <br />
-                user
+                {Roles[userData.user_type]}
             </small>
         </div>
         <hr />
-    </>
-);
+    </>);
+};
 
 const Sidebar = () => {
-    const [open, setOpen] = useState(true);
     return (
         <div className="Sidebar text-white bg-dark">
             {/* Sidebar starts */}

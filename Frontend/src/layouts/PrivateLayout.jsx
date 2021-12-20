@@ -1,17 +1,18 @@
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/NavBar';
 import React, { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { useAuth } from '../context/authContext';
-/* import { REFRESH_TOKEN } from 'graphql/auth/mutations'; */
+import { REFRESH_TOKEN } from '../graphql/Users/mutations';
 import { useNavigate, Outlet } from 'react-router-dom';
 
 const PrivateLayout = () => {
-  /*   const navigate = useNavigate();
+    const navigate = useNavigate();
     const { setToken } = useAuth();
     const [loadingAuth, setLoadingAuth] = useState(true);
 
     // falta captura de error de mutacion
-    const [refreshToken, { data: dataMutation, loading: loadingMutation }] =
+    const [refreshToken, { data: dataMutation }] =
         useMutation(REFRESH_TOKEN);
 
     useEffect(() => {
@@ -28,7 +29,7 @@ const PrivateLayout = () => {
             }
             setLoadingAuth(false);
         }
-    }, [dataMutation, setToken, loadingAuth, navigate]); */
+    }, [dataMutation, setToken, loadingAuth, navigate]);
 
     return (
         <>

@@ -14,17 +14,19 @@ import PrivateLayout from './layouts/PrivateLayout'
 
 import Dashboard from './components/Dashboard'
 import Login from './components/Login/Login'
+import ProfileForm from "./components/Users/ProfileForm";
 import RegisterForm from "./components/Users/UserForm";
 import UserList from './components/Users/UserList'
+import StudentList from './components/Users/StudentList'
 import ProjectList from './components/Projects/ProjectList'
 import ProjectRegister from './components/Projects/ProjectRegister'
-import LeaderList from './components/Users/LeaderList'
 import ProjectUpdate from './components/Projects/ProjectUpdate'
 import ProjectEst from './components/Projects/ProjectEst'
 import AdvancesList from './components/Advances/AdvancesList'
 import AdvanceForm from './components/Advances/AdvanceForm'
 
 import EnrollmentList from './components/Enrollments/EnrollmentList';
+import ProjectLeader from "./components/Projects/ProjectLeader";
 
 const httpLink = createHttpLink({
   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
@@ -61,6 +63,20 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (authToken) {
+      const decoded = jwt_decode(authToken);
+      setUserData({
+        _id: decoded._id,
+        full_name: decoded.full_name,
+        cc: decoded.cc,
+        email: decoded.email,
+        user_type: decoded.user_type,
+        status: decoded.status,
+      });
+    }
+  }, [authToken]);
+
   return (
     <div className={`App d-flex`}>
       <ApolloProvider client={client}>
@@ -71,11 +87,13 @@ function App() {
             <Routes>
               <Route path='/' element={<PrivateLayout />}>
                 <Route exact path="" element={<Dashboard />} />
+                <Route path="/profile" element={<ProfileForm />} />
                 <Route exact path="/users" element={<UserList />} />
-                <Route path="/projects" element={<LeaderList />} />
+                <Route exact path="/students" element={<StudentList />} />
+                <Route path="/projects" element={<ProjectList />} />
                 <Route path="/projects-est" element={<ProjectEst />} />
                 <Route path="/projects/register" element={<ProjectRegister />} />
-                <Route path="/projects/leader/:id" element={<ProjectList />} />
+                <Route path="/projects-leader/:id" element={<ProjectLeader />} />
                 <Route path="/projects/update/:id" element={<ProjectUpdate />} />
                 <Route path="/advances/:id" element={<AdvancesList />} />
                 <Route path="/advances/create/:id" element={<AdvanceForm />} />

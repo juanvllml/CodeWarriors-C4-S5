@@ -1,16 +1,19 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 // Graphql
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { POST_PROJECT } from "../../graphql/Projects/mutations"
-
+import { Loading } from '../Loading';
 import Swal from 'sweetalert2';
+import {useUser} from '../../context/userContext';
 
 import { EstadoProyecto, FaseProyecto } from '../../utils/enums';
 
 const ProjectRegister = () => {
-
+    const { userData } = useUser();
+    const navigate = useNavigate();
+    const loading = false, error = false;
+    const [loader, setLoader] = useState(true);
     const [state, setState] = useState({
         project_id: "",
         project_name: "",
@@ -22,7 +25,7 @@ const ProjectRegister = () => {
         leader_name: "",
         leader_cc: "",
         project_status: "INACTIVO",
-        project_stage: ""
+        project_stage: "INICIADO"
     })
 
     const onChangeHandler = e => {
@@ -66,6 +69,11 @@ const ProjectRegister = () => {
     });
 
     useEffect(() => {
+        setLoader(loading);
+        setLoader(mutationLoading);
+    }, [loading, mutationLoading]);
+
+    useEffect(() => {
         if (mutationData) {
             Toast.fire({
                 position: 'top-end',
@@ -73,6 +81,7 @@ const ProjectRegister = () => {
                 icon: 'success',
                 showConfirmButton: false,
             })
+            navigate('/projects-leader/'+state.leader_cc);
         }
         if (mutationError) {
             Toast.fire({
@@ -84,6 +93,10 @@ const ProjectRegister = () => {
         }
     }, [mutationError, mutationData]);
 
+    useEffect(() => {
+        setState({ ...state, leader_name: userData.full_name, leader_cc: userData._id })
+    }, [userData])
+
     const SubmitForm = (e) => {
         console.log(state)
         e.preventDefault();
@@ -93,214 +106,158 @@ const ProjectRegister = () => {
     }
 
     return (
-        <>
-            <div className="container mt-4">
-                <center><h1>Registrar Proyecto</h1></center>
-                <form
-                    onSubmit={SubmitForm}
-                    className='flex flex-col items-center justify-center'
-                >
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">ID Proyecto</span>
+        <div className="container">
+            {
+                loader ?
+                    <div className="loading d-flex align-items-center justify-content-center">
+                        <Loading />
+                    </div>
+                    :
+                    !error ?
+                        <div className="row mt-3">
+                            <h2>Crear Proyecto</h2>
+                            <div className="row mt-4">
+                                <form
+                                    onSubmit={SubmitForm}
+                                    className='flex flex-col items-center justify-center'
+                                >
+                                    <div className="row g-3 align-items-center">
+                                        <div className="form-outline mb-2 col-6">
+                                            <label className="form-label">ID Proyecto</label>
+                                            <input
+                                                type="text"
+                                                name="project_id"
+                                                className="form-control"
+                                                aria-label="ID Proyecto"
+                                                aria-describedby="inputGroup-sizing-default"
+                                                defaultValue={state.project_id}
+                                                onChange={(e) => onChangeHandler(e)}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-outline mb-2 col-6">
+                                            <label className="form-label">Nombre proyecto </label>
+                                            <input
+                                                type="text"
+                                                name="project_name"
+                                                className="form-control"
+                                                aria-label="Nombre Proyecto"
+                                                aria-describedby="inputGroup-sizing-default"
+                                                defaultValue={state.project_name}
+                                                onChange={(e) => onChangeHandler(e)}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-outline mb-2">
+                                        <label className="form-label">Objetivos Generales</label>
+                                        <textarea
+                                            className="form-control"
+                                            name="general_objectives"
+                                            id="exampleFormControlTextarea1"
+                                            rows="3"
+                                            defaultValue={state.general_objectives}
+                                            onChange={onChangeHandler}
+                                            required
+                                        >
+                                        </textarea>
+                                    </div>
+                                    <div className="form-outline mb-2">
+                                        <label className="form-label">Objetivos Especificos</label>
+                                        <textarea
+                                            className="form-control"
+                                            name="specific_objectives"
+                                            id="exampleFormControlTextarea1"
+                                            rows="3"
+                                            defaultValue={state.specific_objectives}
+                                            onChange={onChangeHandler}
+                                        >
+                                        </textarea>
+                                    </div>
+                                    <div className="form-outline mb-2">
+                                        <label className="form-label">Presupuestos</label>
+                                        <input
+                                            type="number"
+                                            name="budget"
+                                            className="form-control"
+                                            aria-label="Presupuesto"
+                                            aria-describedby="inputGroup-sizing-default"
+                                            defaultValue={parseInt(state.budget)}
+                                            onChange={onChangeHandler}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="row g-3 align-items-center">
+                                        <div className="form-outline mb-2 col-6">
+                                            <label className="form-label">Fecha Inicio</label>
+                                            <input
+                                                type="date"
+                                                name="start_date"
+                                                className="form-control"
+                                                aria-label="Fecha inicio"
+                                                aria-describedby="inputGroup-sizing-default"
+                                                defaultValue={state.start_date}
+                                                onChange={onChangeHandler}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-outline mb-2 col-6">
+                                            <label className="form-label">Fecha Fin</label>
+                                            <input
+                                                type="date"
+                                                name="end_date"
+                                                className="form-control"
+                                                aria-label="Fecha fin"
+                                                aria-describedby="inputGroup-sizing-default"
+                                                defaultValue={state.end_date}
+                                                onChange={onChangeHandler}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="row g-3 align-items-center">
+                                        <div className="form-outline mb-2 col-6">
+                                            <label className="form-label">Estado</label>
+                                            <select className="form-select"
+                                                defaultValue={state.project_status}
+                                                onChange={e => onChangeStatus(e)}
+                                                required
+                                            >
+                                                {
+                                                    Object.keys(EstadoProyecto).map(estado => {
+                                                        return <option key={estado} value={estado}>{EstadoProyecto[estado]}</option>
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                        <div className="form-outline mb-2 col-6">
+                                            <label className="form-label">Fase</label>
+                                            <select className="form-select"
+                                                // value={element.status}
+                                                defaultValue={state.project_stage}
+                                                onChange={e => onChangeStage(e)}
+                                                required
+                                            >
+                                                {
+                                                    Object.keys(FaseProyecto).map(estado => {
+                                                        return <option key={estado} value={estado}>{FaseProyecto[estado]}</option>
+                                                    })
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="text-center mt-5 mb-5">
+                                        <button className="btn btn-primary">
+                                            Guardar
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
-                        <input
-                            type="text"
-                            name="project_id"
-                            className="form-control"
-                            aria-label="ID Proyecto"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.project_id}
-                            onChange={(e) => onChangeHandler(e)}
-                            required
-                        />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Nombre Proyecto</span>
-                        </div>
-                        <input
-                            type="text"
-                            name="project_name"
-                            className="form-control"
-                            aria-label="Nombre Proyecto"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.project_name}
-                            onChange={(e) => onChangeHandler(e)}
-                            required
-                        />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Objetivo general</span>
-                        </div>
-                        <textarea
-                            className="form-control"
-                            name="general_objectives"
-                            id="exampleFormControlTextarea1"
-                            rows="3"
-                            defaultValue={state.general_objectives}
-                            onChange={onChangeHandler}
-                            required
-                        >
-                        </textarea>
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Objetivos específicos</span>
-                        </div>
-                        <textarea
-                            className="form-control"
-                            name="specific_objectives"
-                            id="exampleFormControlTextarea1"
-                            rows="3"
-                            defaultValue={state.specific_objectives}
-                            onChange={onChangeHandler}
-                        >
-                        </textarea>
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Presupuesto</span>
-                        </div>
-                        <input
-                            type="number"
-                            name="budget"
-                            className="form-control"
-                            aria-label="Presupuesto"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={parseInt(state.budget)}
-                            onChange={onChangeHandler}
-                            required
-                        />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Fecha inicio</span>
-                        </div>
-                        <input
-                            type="date"
-                            name="start_date"
-                            className="form-control"
-                            aria-label="Fecha inicio"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.start_date}
-                            onChange={onChangeHandler}
-                            required
-                        />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Fecha fin</span>
-                        </div>
-                        <input
-                            type="date"
-                            name="end_date"
-                            className="form-control"
-                            aria-label="Fecha fin"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.end_date}
-                            onChange={onChangeHandler}
-                        />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Nombre Lider</span>
-                        </div>
-                        <input
-                            type="text"
-                            name="leader_name"
-                            className="form-control"
-                            aria-label="Nombre Lider"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.leader_name}
-                            onChange={onChangeHandler}
-                            required
-                        />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">CC Lider</span>
-                        </div>
-                        <input
-                            type="text"
-                            name="leader_cc"
-                            className="form-control"
-                            aria-label="CC Lider"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.leader_cc}
-                            onChange={onChangeHandler}
-                            required
-                        />
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Estado</span>
-                        </div>
-                        <select className="form-select"
-                            // value={element.status}
-                            defaultValue={state.project_status}
-                            onChange={e => onChangeStatus(e)}
-                            required
-                        >
-                            {
-                                Object.keys(EstadoProyecto).map(estado => {
-                                    return <option key={estado} value={estado}>{EstadoProyecto[estado]}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Fase</span>
-                        </div>
-                        <select className="form-select"
-                            // value={element.status}
-                            defaultValue={state.project_stage}
-                            onChange={e => onChangeStage(e)}
-                            required
-                        >
-                            {
-                                Object.keys(FaseProyecto).map(estado => {
-                                    return <option key={estado} value={estado}>{FaseProyecto[estado]}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-
-                    <div className="text-center mt-5 mb-5">
-                        <button className="btn btn-primary">
-                            Guardar
-                        </button>
-                    </div>
-
-                </form>
-
-
-                {/* <div className="text-center mt-5">
-                        <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={()=>{
-                                console.log(state)
-                            }}
-                        >
-                            check state
-                        </button>
-                </div> */}
-
-            </div>
-        </>
+                        :
+                        <></>
+            }
+        </div>
     )
 
 }

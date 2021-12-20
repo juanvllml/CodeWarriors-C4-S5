@@ -1,6 +1,5 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { Link } from 'react-router-dom';
-
+import React, { useEffect } from 'react';
+import { Loading } from '../Loading';
 // Graphql
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { GET_STUDENTS } from "../../graphql/Users/queries"
@@ -15,10 +14,9 @@ const StudentList = () => {
 
     // Get Students
     const { loading, error, data } = useQuery(GET_STUDENTS, { variables: { user_type: "ESTUDIANTE" } });
-
     // Update Student
-    const [updateStudent, { data: mutationData, loading: mutationLoading, error: mutationError }] =
-    useMutation(UPDATE_USER);
+    const [updateStudent, { data: mutationData, error: mutationError }] =
+        useMutation(UPDATE_USER);
 
     const handleStatusStudent = async (e, _id) => {
         e.preventDefault();
@@ -52,59 +50,64 @@ const StudentList = () => {
                 showConfirmButton: false,
             })
         }
-    }, [mutationError, mutationData]);
+    }, [mutationError, mutationData,Toast]);
 
 
     return (
-        <>
-            <div className="container mt-4">
-                <center><h1>Estudiantes registrados</h1></center>
-                
-                {!loading ?
-                <div className="table-responsive">
-                    <table className="table table-hover table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Nombre</th>
-                                <th>CC</th>
-                                <th>Email</th>
-                                <th>User Type</th>
-                                <th>Status</th>
+        <div className="container">
+            {
+                loading ?
+                    <div className="loading d-flex align-items-center justify-content-center">
+                        <Loading />
+                    </div>
+                    :
+                    !error ?
+                        <div className="row mt-3">
+                            <h2>Lista de Estudiantes</h2>
+                            <div className="row mt-4">
+                                <div className="table-responsive">
+                                    <table className="table table-bordered">
+                                        <thead className="table-dark">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>CC</th>
+                                                <th>Email</th>
+                                                <th>User Type</th>
+                                                <th>Status</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.usersByType.map((element, index) => (
-                                <tr key={`p-${index}`}>
-                                    <td>{element._id}</td>
-                                    <td>{element.full_name}</td>
-                                    <td>{element.cc}</td>
-                                    <td>{element.email}</td>
-                                    <td>{element.user_type}</td>
-                                    {/* <td>{element.status}</td> */}
-                                    <td>
-                                    <select className="form-select"
-                                            value={element.status}
-                                            onChange={e => handleStatusStudent(e, element._id)}
-                                        >
-                                            {
-                                                Object.keys(EstadoUsuario).map(estado => {
-                                                    return <option key={estado} value={estado}>{EstadoUsuario[estado]}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </td>
-                                </tr>
-                            ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {data.usersByType.map((element, index) => (
+                                                <tr key={element._id}>
+                                                    <td>{element.full_name}</td>
+                                                    <td>{element.cc}</td>
+                                                    <td>{element.email}</td>
+                                                    <td>{element.user_type}</td>
+                                                    <td>
+                                                        <select className="form-select"
+                                                            value={element.status}
+                                                            onChange={e => handleStatusStudent(e, element._id)}
+                                                        >
+                                                            {
+                                                                Object.keys(EstadoUsuario).map(estado => {
+                                                                    return <option key={estado} value={estado}>{EstadoUsuario[estado]}</option>
+                                                                })
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            ))}
 
-                        </tbody>
-                    </table>
-                </div>
-                : null}
-
-            </div>
-        </>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        :
+                        <p>{error.message}</p>
+            }
+        </div>
     )
 }
 
