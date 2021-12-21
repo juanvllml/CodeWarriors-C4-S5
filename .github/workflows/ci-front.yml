@@ -20,19 +20,24 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install
+        working-directory: ./Frontend
         run: |
           npm install
       - name: npm test
+        working-directory: ./Frontend
         run: |
           npm test
         env:
           CI: true
       - name: npm build
+        working-directory: ./Frontend
         run: |
           npm run build
       - name: Add remote origin
+        working-directory: ./Frontend
         run: |
           git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_FRONT_NAME }}.git
       - name: Deploy to Heroku
+        working-directory: ./Frontend
         run: |
           git push heroku HEAD:master -f
