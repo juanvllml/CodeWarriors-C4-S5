@@ -27,6 +27,8 @@ import AdvanceForm from './components/Advances/AdvanceForm'
 
 import EnrollmentList from './components/Enrollments/EnrollmentList';
 import ProjectLeader from "./components/Projects/ProjectLeader";
+import ObservationForm from "./components/Advances/ObservationForm";
+import AdvanceUpdate from "./components/Advances/AdvanceUpdate";
 
 const httpLink = createHttpLink({
   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
@@ -97,8 +99,9 @@ function App() {
                 <Route path="/projects/update/:id" element={<ProjectUpdate />} />
                 <Route path="/advances/:id" element={<AdvancesList />} />
                 <Route path="/advances/create/:id" element={<AdvanceForm />} />
-                <Route path="/advances/update/:id" element={<ProjectList />} />
-                <Route path="/enrollments" element={<EnrollmentList />} />
+                <Route path="/advances/update/:id" element={<AdvanceUpdate />} />
+                <Route path="/advances/observations/:id" element={<ObservationForm />} />
+                <Route path="/enrollments/project/:id" element={<EnrollmentList />} />
               </Route>
               <Route path='/auth' element={<AuthLayout />}>
                 <Route path='register' element={<RegisterForm />} />

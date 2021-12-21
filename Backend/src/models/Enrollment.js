@@ -5,7 +5,7 @@ import { UserModel } from './User';
 const enrollmentSchema = new Schema({
     enrollment_id:{
         type: String,
-        required: true
+        required: false
     },
     project_id: {
         // type: Schema.Types.ObjectId,
@@ -26,11 +26,11 @@ const enrollmentSchema = new Schema({
     },
     admission_date: {
         type: Date,
-        required: true
+        required: false
     },
     egress_date: {
         type: Date,
-        required: true
+        required: false
     }
 });
 

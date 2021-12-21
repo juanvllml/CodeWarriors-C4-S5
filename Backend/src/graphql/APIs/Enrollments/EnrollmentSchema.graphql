@@ -22,12 +22,12 @@ type Enrollment {
 }
 
 input EnrollmentInput {
-    enrollment_id: String!
+    enrollment_id: String
     project_id: String!
     student_id: String!
     enrollment_status: String!
-    admission_date: Date!
-    egress_date: Date!
+    admission_date: Date
+    egress_date: Date
 }
 
 input EnrollmentUpdate {

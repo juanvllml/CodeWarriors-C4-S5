@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose";
 
 const advanceSchema = new Schema({
-    advance_id:{
+    advance_id: {
         type: String,
-        required: true
+        required: false
     },
     project_id: {
         type: String,
@@ -17,18 +17,14 @@ const advanceSchema = new Schema({
         type: Date,
         required: true
     },
-    advance_description: [
-        {
-          type: String,
-          required: true
-        },
-    ],
-    leader_observations: [
-        {
-          type: String,
-          required: true
-        },
-    ]
+    advance_description: {
+        type: String,
+        required: true
+    },
+    leader_observations: {
+        type: String,
+        required: false
+    }
 });
 
 export default model("Advance", advanceSchema)

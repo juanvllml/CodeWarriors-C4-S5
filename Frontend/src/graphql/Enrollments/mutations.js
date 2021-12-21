@@ -9,4 +9,15 @@ const UPDATE_ENROLLMENT_STATUS = gql`
     }
 `;
 
-export { UPDATE_ENROLLMENT_STATUS };
+const CREATE_ENROLLMENT = gql`
+    mutation createEnrollment($campos: EnrollmentInput!) {
+        createEnrollment(input: $campos) {
+        _id
+        enrollment_status
+        }
+    }
+`;
+
+export { UPDATE_ENROLLMENT_STATUS,
+    CREATE_ENROLLMENT
+};

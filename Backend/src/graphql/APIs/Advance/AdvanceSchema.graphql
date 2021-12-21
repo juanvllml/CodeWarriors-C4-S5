@@ -2,6 +2,7 @@ scalar Date
 
 type Query {
     advances: [Advance]
+    advancesById(_id: String!): Advance
     advancesByProject(project_id: String!): [Advance]
 }
 
@@ -17,17 +18,17 @@ type Advance {
     project_id: String
     student_id: String
     advance_date: Date
-    advance_description: [String]
-    leader_observations: [String]
+    advance_description: String
+    leader_observations: String
 }
 
 input AdvanceInput {
-    advance_id: String!
+    advance_id: String
     project_id: String!
     student_id: String!
     advance_date: Date!
-    advance_description: [String]!
-    leader_observations: [String]!
+    advance_description: String!
+    leader_observations: String
 }
 
 input AdvanceUpdate {
@@ -35,6 +36,6 @@ input AdvanceUpdate {
     project_id: String
     student_id: String
     advance_date: Date
-    advance_description: [String]
-    leader_observations: [String]
+    advance_description: String
+    leader_observations: String
 }

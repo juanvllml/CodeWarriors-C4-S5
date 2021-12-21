@@ -1,47 +1,48 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 // Graphql
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { GET_PROJECT_BY_ID } from "../../graphql/Projects/queries"
 import { UPDATE_PROJECT_LEADER } from "../../graphql/Projects/mutations"
+import { Loading } from '../Loading';
 
 import Swal from 'sweetalert2';
 
-const ProjectRegister = () => {
-    
+const ProjectUpdate = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
     const _id = id;
-
+    const [loader, setLoader] = useState(true);
     const { loading, error, data } = useQuery(GET_PROJECT_BY_ID, { variables: { _id: id } });
     const [state, setState] = useState({})
 
     useEffect(() => {
-        if(loading === false && data){
+        if (loading === false && data) {
             let datos = data.projectById
             setState(datos);
         }
     }, [loading, data])
 
     const onChangeHandler = e => {
-        const { name, value } = e.target;        
-        if (name === "budget"){
+        const { name, value } = e.target;
+        if (name === "budget") {
             setState(prevState => ({
                 ...prevState,
                 [name]: parseInt(value)
             }));
-        }else{
+        } else {
             setState(prevState => ({
                 ...prevState,
                 [name]: value
             }));
         }
-    };    
-    
+    };
+
     // Update Project
     const [updateProject, { data: mutationData, loading: mutationLoading, error: mutationError }] =
-    useMutation(UPDATE_PROJECT_LEADER);
+        useMutation(UPDATE_PROJECT_LEADER);
 
     const Toast = Swal.mixin({
         toast: true,
@@ -58,6 +59,7 @@ const ProjectRegister = () => {
                 icon: 'success',
                 showConfirmButton: false,
             })
+            navigate('/projects-leader/' + state.leader_cc);
         }
         if (mutationError) {
             Toast.fire({
@@ -68,6 +70,10 @@ const ProjectRegister = () => {
             })
         }
     }, [mutationError, mutationData]);
+
+    useEffect(() => {
+        setLoader(mutationLoading);
+    }, [mutationLoading]);
 
     const SubmitForm = (e) => {
         console.log(state)
@@ -81,102 +87,90 @@ const ProjectRegister = () => {
         }
 
         updateProject({
-            // variables: { _id, campos: { ...state } },
             variables: { _id, campos: { ...datos } },
         });
     }
 
     return (
-        <>
-            <div className="container mt-4">
-                <center><h1>Editar Proyecto</h1></center>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Nombre Proyecto</span>
-                        </div>
-                        <input
-                            type="text"
-                            name="project_name"
-                            className="form-control"
-                            aria-label="Nombre Proyecto"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.project_name}
-                            onChange={(e)=>onChangeHandler(e)}
-                        />
+        <div className="container">
+            {
+                loader ?
+                    <div className="loading d-flex align-items-center justify-content-center">
+                        <Loading />
                     </div>
+                    :
+                    !error ?
+                        <div className="row mt-3">
+                            <h2>Editar Proyecto {state.project_name}</h2>
+                            <div className="row mt-4">
+                                <form
+                                    onSubmit={SubmitForm}
+                                    className='flex flex-col items-center justify-center'
+                                >
+                                    <div className="form-outline mb-2">
+                                        <label className="form-label">Nombre proyecto </label>
+                                        <input
+                                            type="text"
+                                            name="project_name"
+                                            className="form-control"
+                                            aria-label="Nombre Proyecto"
+                                            aria-describedby="inputGroup-sizing-default"
+                                            defaultValue={state.project_name}
+                                            onChange={(e) => onChangeHandler(e)}
+                                        />
+                                    </div>
+                                    <div className="form-outline mb-2">
+                                        <label className="form-label">Objetivos Generales</label>
+                                        <textarea
+                                            className="form-control"
+                                            name="general_objectives"
+                                            id="exampleFormControlTextarea1"
+                                            rows="3"
+                                            defaultValue={state.general_objectives}
+                                            onChange={onChangeHandler}
+                                        >
+                                        </textarea>
+                                    </div>
 
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Objetivo general</span>
+                                    <div className="form-outline mb-2">
+                                        <label className="form-label">Objetivos Especificos</label>
+                                        <textarea
+                                            className="form-control"
+                                            name="specific_objectives"
+                                            id="exampleFormControlTextarea1"
+                                            rows="3"
+                                            defaultValue={state.specific_objectives}
+                                            onChange={onChangeHandler}
+                                        >
+                                        </textarea>
+                                    </div>
+
+                                    <div className="form-outline mb-2">
+                                        <label className="form-label">Presupuestos</label>
+                                        <input
+                                            type="number"
+                                            name="budget"
+                                            className="form-control"
+                                            aria-label="Presupuesto"
+                                            aria-describedby="inputGroup-sizing-default"
+                                            defaultValue={state.budget}
+                                            onChange={onChangeHandler}
+                                        />
+                                    </div>
+
+                                    <div className="text-center mt-5 mb-5">
+                                        <button className="btn btn-primary">
+                                            Guardar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <textarea
-                            className="form-control"
-                            name="general_objectives"
-                            id="exampleFormControlTextarea1"
-                            rows="3"
-                            defaultValue={state.general_objectives}
-                            onChange={onChangeHandler}
-                        >
-                        </textarea>
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Objetivos específicos</span>
-                        </div>
-                        <textarea
-                            className="form-control"
-                            name="specific_objectives"
-                            id="exampleFormControlTextarea1"
-                            rows="3"
-                            defaultValue={state.specific_objectives}
-                            onChange={onChangeHandler}
-                        >
-                        </textarea>
-                    </div>
-
-                    <div className="input-group mb-3">
-                        <div className="input-group-prepend col-3">
-                            <span className="input-group-text" id="inputGroup-sizing-default">Presupuesto</span>
-                        </div>
-                        <input
-                            type="number"
-                            name="budget"
-                            className="form-control"
-                            aria-label="Presupuesto"
-                            aria-describedby="inputGroup-sizing-default"
-                            defaultValue={state.budget}
-                            onChange={onChangeHandler}
-                        />
-                    </div>                    
-
-                    <div className="text-center mt-5 mb-5">
-                        <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={SubmitForm}
-                        >
-                            Guardar
-                        </button>                        
-                    </div>
-
-                <div className="text-center mt-5">
-                        <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={()=>{
-                                console.log(state)
-                            }}
-                        >
-                            check state
-                        </button>                        
-                </div>
-
-            </div>
-        </>
+                        :
+                        <></>
+            }
+        </div>
     )
-
 }
 
-export default ProjectRegister
+export default ProjectUpdate

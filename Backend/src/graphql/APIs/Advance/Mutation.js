@@ -7,11 +7,11 @@ const Mutation = {
         return newAdvance;
     },
     async updateAdvance(_, { _id, input }) {
-            return await Advance.findByIdAndUpdate(_id, input, { new: true});
-            },
+        return await Advance.findByIdAndUpdate(_id, input, { new: true });
+    },
 
-    async deleteAdvance(_, { _id }){
-           return await Advance.findByIdAndDelete(_id);
-        }
+    async deleteAdvance(_, { _id }) {
+        return await Advance.findByIdAndDelete(_id);
     }
+}
 export default Mutation;

@@ -28,8 +28,23 @@ const GET_ADVANCES_BY_PROJECT = gql `
     }
 `;
 
+const GET_ADVANCE_BY_ID = gql `
+query ($_id: String!) {
+    advancesById(_id: $_id){
+        _id
+        advance_id
+        project_id
+        student_id
+        advance_date
+        advance_description
+        leader_observations
+    }
+}
+`;
+
 
 export {
     GET_ADVANCES,
-    GET_ADVANCES_BY_PROJECT
+    GET_ADVANCES_BY_PROJECT,
+    GET_ADVANCE_BY_ID
 };

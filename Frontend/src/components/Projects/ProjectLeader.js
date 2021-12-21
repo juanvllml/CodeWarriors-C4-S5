@@ -62,7 +62,7 @@ const ProjectLeader = (props) => {
                                                     <td>{element.project_status}</td>
                                                     <td>{element.project_stage}</td>
                                                     <td>
-                                                        <Link to={`/projects/update/${element._id}`}>
+                                                        <Link to={`/enrollments/project/${element._id}`}>
                                                             <button
                                                                 className="btn btn-warning btn-sm"
                                                             >

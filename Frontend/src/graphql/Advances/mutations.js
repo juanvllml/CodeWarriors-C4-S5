@@ -5,7 +5,8 @@ const UPDATE_ADVANCE = gql`
         updateAdvance(_id: $_id, input: $campos) {
         _id
         project_id,
-        advance_descriptions
+        advance_description,
+        leader_observations
         }
     }
 `;

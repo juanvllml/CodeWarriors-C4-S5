@@ -3,28 +3,25 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 
 // Graphql
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { POST_ADVANCE } from "../../graphql/Advances/mutations"
-import { GET_PROJECT_BY_ID } from '../../graphql/Projects/queries'
+import { UPDATE_ADVANCE } from "../../graphql/Advances/mutations"
+import { GET_ADVANCE_BY_ID } from '../../graphql/Advances/queries'
 import { Loading } from '../Loading';
-import { useUser } from '../../context/userContext';
+
 import Swal from 'sweetalert2';
 
-const AdvanceForm = (params) => {
-    const { userData } = useUser();
+const AdvanceUpdate = (params) => {
     const navigate = useNavigate();
     const { id } = useParams();
     const _id = id;
     const [loader, setLoader] = useState(true);
-    const { loading, error, data } = useQuery(GET_PROJECT_BY_ID, { variables: { _id: id } });
-    const [project, setProject] = useState({});
+    const { loading, error, data } = useQuery(GET_ADVANCE_BY_ID, { variables: { _id: id } });
     const [state, setState] = useState({
         advance_description: "",
-        project_id : "",
-        student_id : "",
+        leader_observations: ""
     })
 
-    const [createAdvance, { data: mutationData, loading: mutationLoading, error: mutationError }] =
-        useMutation(POST_ADVANCE);
+    const [updateAdvance, { data: mutationData, loading: mutationLoading, error: mutationError }] =
+        useMutation(UPDATE_ADVANCE);
 
     const Toast = Swal.mixin({
         toast: true,
@@ -35,8 +32,8 @@ const AdvanceForm = (params) => {
 
     useEffect(() => {
         if (loading === false && data) {
-            let datos = data.projectById
-            setProject(datos);
+            let datos = data.advancesById
+            setState(datos);
         }
         setLoader(loading);
     }, [loading, data])
@@ -45,11 +42,11 @@ const AdvanceForm = (params) => {
         if (mutationData) {
             Toast.fire({
                 position: 'top-end',
-                title: 'Avance agregado exitosamente!',
+                title: 'Observación agregada exitosamente!',
                 icon: 'success',
                 showConfirmButton: false,
             })
-            navigate('/advances/' + project._id);
+            navigate('/advances/' + state.project_id);
         }
         if (mutationError) {
             Toast.fire({
@@ -65,13 +62,10 @@ const AdvanceForm = (params) => {
         console.log(state)
         e.preventDefault();
         let datos = {
-            "project_id": project._id,
-            "student_id": userData._id,
-            "advance_description": state.advance_description,
-            "advance_date" : new Date()
+            "advance_description": state.advance_description
         }
-        createAdvance({
-            variables: { campos: { ...datos } },
+        updateAdvance({
+            variables: { _id, campos: { ...datos } },
         });
     }
 
@@ -85,12 +79,12 @@ const AdvanceForm = (params) => {
                     :
                     !error ?
                         <div className="row mt-3">
-                            <h2>Avances proyecto {project.project_name}</h2>
+                            <h2>Avances proyecto</h2>
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item">
-                                        <Link to={"/advances/"+project._id}>Lista de Avances </Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Crear Avance</li>
+                                        <Link to={"/advances/"+state.project_id}>Lista de Avances </Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Editar Avance</li>
                                 </ol>
                             </nav>
                             <hr/>
@@ -140,4 +134,4 @@ const AdvanceForm = (params) => {
 
 }
 
-export default AdvanceForm
+export default AdvanceUpdate
