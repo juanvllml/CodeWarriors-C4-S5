@@ -91,11 +91,11 @@ const ProjectRegister = () => {
                 showConfirmButton: false,
             })
         }
-    }, [mutationError, mutationData]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [mutationError, mutationData]);
 
     useEffect(() => {
         setState({ ...state, leader_name: userData.full_name, leader_cc: userData._id })
-    }, [userData]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [userData])
 
     const SubmitForm = (e) => {
         console.log(state)

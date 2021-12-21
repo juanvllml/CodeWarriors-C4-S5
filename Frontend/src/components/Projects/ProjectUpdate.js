@@ -70,7 +70,7 @@ const ProjectUpdate = () => {
                 showConfirmButton: false,
             })
         }
-    }, [mutationError, mutationData]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [mutationError, mutationData]);
 
     useEffect(() => {
         setLoader(mutationLoading);
