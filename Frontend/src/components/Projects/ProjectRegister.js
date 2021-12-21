@@ -95,7 +95,7 @@ const ProjectRegister = () => {
 
     useEffect(() => {
         setState({ ...state, leader_name: userData.full_name, leader_cc: userData._id })
-    }, [userData])
+    }, [userData]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const SubmitForm = (e) => {
         console.log(state)
