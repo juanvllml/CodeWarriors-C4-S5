@@ -91,7 +91,7 @@ const ProjectRegister = () => {
                 showConfirmButton: false,
             })
         }
-    }, [mutationError, mutationData]);
+    }, [mutationError, mutationData]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         setState({ ...state, leader_name: userData.full_name, leader_cc: userData._id })
