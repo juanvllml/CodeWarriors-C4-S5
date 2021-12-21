@@ -1,4 +1,4 @@
-name: CI FRONTEND
+name: CI_FRONTEND
 
 on:
   push:
