@@ -32,7 +32,7 @@ jobs:
       - name: Add remote origin
         working-directory: ./Backend
         run: |
-          git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_FRONT_NAME }}.git
+          git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_BACK_NAME }}.git
       - name: Deploy to Heroku
         run: |
           git subtree push --prefix Backend heroku master
