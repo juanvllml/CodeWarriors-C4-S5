@@ -1,0 +1,38 @@
+name: CI_BACKEND
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        working-directory: ./Backend
+        run: |
+          npm install
+      #- name: npm test
+      #  working-directory: ./Frontend
+      #  run: |
+      #    npm test
+        env:
+          CI: true
+      - name: Add remote origin
+        working-directory: ./Backend
+        run: |
+          git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_FRONT_NAME }}.git
+      - name: Deploy to Heroku
+        run: |
+          git subtree push --prefix Backend heroku master
