@@ -31,8 +31,8 @@ import ObservationForm from "./components/Advances/ObservationForm";
 import AdvanceUpdate from "./components/Advances/AdvanceUpdate";
 
 const httpLink = createHttpLink({
-  // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
-  uri: 'http://localhost:3100',
+  uri: 'https://gestionproyectos-ci-backend.herokuapp.com',
+  // uri: 'http://localhost:3100',
 });
 
 const authLink = setContext((_, { headers }) => {
