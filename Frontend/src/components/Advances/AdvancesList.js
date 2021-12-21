@@ -53,7 +53,7 @@ const AdvancesList = (props) => {
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item">
-                                        <Link to={(userData.user_type === 'ESTUDIANTE')? "/projects-est" : "projects-leader/"+id}>Lista de proyectos </Link></li>
+                                        <Link to={(userData.user_type === 'ESTUDIANTE')? "/projects-est" : "/projects-leader/"+userData._id}>Lista de proyectos </Link></li>
                                     <li className="breadcrumb-item active" aria-current="page">Lista de Avances</li>
                                 </ol>
                             </nav>

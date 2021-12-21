@@ -7,7 +7,6 @@ import { GET_Projects } from '../../graphql/Projects/queries';
 import { GET_ENROLLMENTS } from '../../graphql/Enrollments/queries';
 import { Loading } from '../Loading';
 import { EstadoProyecto, FaseProyecto, } from '../../utils/enums';
-import { UPDATE_PROJECT } from '../../graphql/Projects/mutations';
 import { CREATE_ENROLLMENT } from '../../graphql/Enrollments/mutations';
 import { useUser } from '../../context/userContext';
 

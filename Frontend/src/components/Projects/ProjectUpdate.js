@@ -7,10 +7,11 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { GET_PROJECT_BY_ID } from "../../graphql/Projects/queries"
 import { UPDATE_PROJECT_LEADER } from "../../graphql/Projects/mutations"
 import { Loading } from '../Loading';
-
+import { useUser } from '../../context/userContext';
 import Swal from 'sweetalert2';
 
 const ProjectUpdate = () => {
+    const { userData } = useUser();
     const navigate = useNavigate();
     const { id } = useParams();
     const _id = id;
@@ -102,6 +103,14 @@ const ProjectUpdate = () => {
                     !error ?
                         <div className="row mt-3">
                             <h2>Editar Proyecto {state.project_name}</h2>
+                            <nav aria-label="breadcrumb">
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item">
+                                        <Link to={"/projects-leader/"+userData._id}>Lista de proyectos </Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Editar proyecto</li>
+                                </ol>
+                            </nav>
+                            <hr/>
                             <div className="row mt-4">
                                 <form
                                     onSubmit={SubmitForm}

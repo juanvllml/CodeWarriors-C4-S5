@@ -9,10 +9,12 @@ import { GET_Users } from '../../graphql/Users/queries';
 import { UPDATE_ENROLLMENT_STATUS } from "../../graphql/Enrollments/mutations"
 import { Loading } from '../Loading';
 import Swal from 'sweetalert2';
+import { useUser } from '../../context/userContext';
 
 import { EstadoInscripcion } from '../../utils/enums';
 
 const EnrollmentList = () => {
+    const { userData } = useUser();
     const { id } = useParams();
     const navigate = useNavigate();
     const [state, setState] = useState({})
@@ -101,6 +103,14 @@ const EnrollmentList = () => {
                     !error ?
                         <div className="row mt-3">
                             <h2>Inscripciones del proyecto {project?.projectById?.project_name}</h2>
+                            <nav aria-label="breadcrumb">
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item">
+                                        <Link to={"/projects-leader/"+userData._id}>Lista de proyectos </Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Inscripciones</li>
+                                </ol>
+                            </nav>
+                            <hr/>
                             <div className="row mt-4">
                                 <div className="table-responsive">
                                     <table className="table table-bordered">
