@@ -18,7 +18,8 @@
     "bcrypt": "^5.0.1",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.13"
+    "mongoose": "^6.0.13",
+    "nodemon": "^2.0.15"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
