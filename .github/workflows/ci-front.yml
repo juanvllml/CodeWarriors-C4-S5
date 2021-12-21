@@ -23,10 +23,10 @@ jobs:
         working-directory: ./Frontend
         run: |
           npm install
-      - name: npm test
-        working-directory: ./Frontend
-        run: |
-          npm test
+      #- name: npm test
+      #  working-directory: ./Frontend
+      #  run: |
+      #    npm test
         env:
           CI: true
       - name: npm build
